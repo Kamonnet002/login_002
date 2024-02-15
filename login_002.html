@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Handler</title>
+    <link rel="stylesheet" href="login.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url(image/bb.avif);
+            
+        }
+        form {
+            text-align: left; 
+            margin: auto;
+        
+        }
+     
+    </style>
+</head>
+<body>
+    <h1>LOG IN</h1>
+  <form action=" ">
+    <div class="container">
+        <div class="row paddingtop">
+          <div class="col-lg-6">
+            <img src="image/login.png" class="img-fluid" alt="loginPicture" width="200px" />
+          </div>
+          <div class="col-lg-6">
+        <p>Username :</p>
+        <input type="text" id="username" />
+        <p id="errorUsername" class="error"></p>
+        <p>Password :</p>
+        <input type="password" id="password" />
+        <p id="errorPassword" class="error"></p>
+    </div>
+    <button type="submit" class="btn btn-primary">Log in</button>
+    <button type="reset" class="btn btn-danger">Cancel</button>
+   
+</div>
+    </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelector("form").onsubmit = function (event) {
+                let username = document.querySelector("#username").value;
+                let password = document.querySelector("#password").value;
+
+               
+                let checkusername = username.length >= 8;
+                if (!checkusername) {
+                    document.querySelector("#errorUsername").innerHTML = "Username must be at least 8 characters";
+                } else {
+                    document.querySelector("#errorUsername").innerHTML = ""; 
+                }
+                let checkpassword = password.length >= 8;
+                if (!checkpassword) {
+                    document.querySelector("#errorPassword").innerHTML = "Password must be at least 8 characters";
+                } else {
+                    document.querySelector("#errorPassword").innerHTML = "";
+                }
+
+               
+                if (checkusername && checkpassword) {
+                    return true; 
+                } else {
+                    event.preventDefault();
+                    return false;
+                }
+            };
+
+            
+        });
+    </script>
+
+<script>
+
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+
+</script>
+</body>
+</html>
